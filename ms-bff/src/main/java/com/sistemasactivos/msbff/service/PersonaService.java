@@ -2,6 +2,7 @@ package com.sistemasactivos.msbff.service;
 
 import com.sistemasactivos.msbff.model.Persona;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -11,7 +12,9 @@ import reactor.core.publisher.Mono;
 
 @Service
 public class PersonaService implements IPersonaService {
+
     @Autowired
+    @Qualifier("webClientPersona")
     private WebClient webClient;
 
     public Flux<Persona> findAll() {
@@ -31,7 +34,6 @@ public class PersonaService implements IPersonaService {
     }
 
     public Mono<Persona> save(Persona persona) {
-        System.out.println("Persona: " + persona.getApellido());
         return webClient.post()
                 .uri("/personas")
                 .body(Mono.just(persona), Persona.class)
