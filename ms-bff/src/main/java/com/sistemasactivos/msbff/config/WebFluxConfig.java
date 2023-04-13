@@ -24,17 +24,22 @@ public class WebFluxConfig implements WebFluxConfigurer {
     Logger logger = LoggerFactory.getLogger(WebFluxConfig.class);
 
     @Bean
-    @Qualifier("webClientPersona")
+    @Qualifier("webClientPersona") // Le pongo un nombre para poder inyectarlo en el servicio
     public WebClient getWebClientPersona() {
+        // url del microservicio persona
         return createWebClient("http://localhost:8081/api/v1");
     }
 
     @Bean
-    @Qualifier("webClientCategoria")
+    @Qualifier("webClientCategoria") // Le pongo un nombre para poder inyectarlo en el servicio
     public WebClient getWebClientCategoria() {
+        // url del microservicio categoria
         return createWebClient("http://localhost:8083/api/v1");
     }
 
+    /**
+     * Crea un cliente web para consumir los microservicios
+     */
     private WebClient createWebClient(String baseUrl) {
         HttpClient httpClient = HttpClient.create()
                 .tcpConfiguration(client ->
@@ -46,7 +51,7 @@ public class WebFluxConfig implements WebFluxConfigurer {
         ClientHttpConnector connector = new ReactorClientHttpConnector(httpClient.wiretap(true));
 
         return WebClient.builder()
-                .baseUrl(baseUrl)
+                .baseUrl(baseUrl) // url del microservicio a usar
                 .clientConnector(connector)
                 .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                 .build();
