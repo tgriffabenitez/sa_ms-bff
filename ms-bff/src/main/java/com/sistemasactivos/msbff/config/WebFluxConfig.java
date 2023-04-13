@@ -35,7 +35,7 @@ public class WebFluxConfig implements WebFluxConfigurer {
         ClientHttpConnector connector = new ReactorClientHttpConnector(httpClient.wiretap(true));
 
         return WebClient.builder()
-                .baseUrl("https://bff.blinksalud.com/api/v1") //solo el dominio.
+                .baseUrl("http://localhost:8081/api/v1") //solo el dominio.
                 .clientConnector(connector)
                 .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                 .build();
