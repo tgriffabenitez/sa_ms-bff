@@ -1,9 +1,9 @@
 package com.sistemasactivos.msbff.service;
 
 import com.sistemasactivos.msbff.model.Persona;
+import com.sistemasactivos.msbff.utils.StatusCodeHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
@@ -27,38 +27,26 @@ public class PersonaService implements IPersonaService {
     public Mono<Persona> findById(Long id) {
         return webClient.get()
                 .uri("/persona/" + id)
-                .retrieve()
-                .onStatus(httpStatus -> HttpStatus.NOT_FOUND.equals(httpStatus),
-                        clientResponse -> Mono.empty())
-                .bodyToMono(Persona.class);
+                .exchangeToMono(clientResponse -> StatusCodeHandler.clientResponse(clientResponse, Persona.class));
     }
 
     public Mono<Persona> save(Persona persona) {
         return webClient.post()
                 .uri("/personas")
-                .body(Mono.just(persona), Persona.class)
-                .retrieve()
-                .onStatus(httpStatus -> HttpStatus.NOT_FOUND.equals(httpStatus),
-                        clientResponse -> Mono.empty())
-                .bodyToMono(Persona.class);
+                .bodyValue(persona)
+                .exchangeToMono(clientResponse -> StatusCodeHandler.clientResponse(clientResponse, Persona.class));
     }
 
     public Mono<Void> delete(Long id) {
         return webClient.delete()
                 .uri("/persona/" + id)
-                .retrieve()
-                .onStatus(httpStatus -> HttpStatus.NOT_FOUND.equals(httpStatus),
-                        clientResponse -> Mono.empty())
-                .bodyToMono(Void.class);
+                .exchangeToMono(clientResponse -> StatusCodeHandler.clientResponse(clientResponse, Void.class));
     }
 
     public Mono<Persona> update(Long id, Persona persona) {
         return webClient.put()
                 .uri("/persona/" + id)
-                .body(Mono.just(persona), Persona.class)
-                .retrieve()
-                .onStatus(httpStatus -> HttpStatus.NOT_FOUND.equals(httpStatus),
-                        clientResponse -> Mono.empty())
-                .bodyToMono(Persona.class);
+                .bodyValue(persona)
+                .exchangeToMono(clientResponse -> StatusCodeHandler.clientResponse(clientResponse, Persona.class));
     }
 }
