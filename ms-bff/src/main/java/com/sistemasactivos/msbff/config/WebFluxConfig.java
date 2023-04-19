@@ -27,7 +27,7 @@ public class WebFluxConfig implements WebFluxConfigurer {
     @Qualifier("webClientPersona") // Le pongo un nombre para poder inyectarlo en el servicio
     public WebClient getWebClientPersona() {
         // url del microservicio persona
-        return createWebClient("http://localhost:8081/api/v1", "admin1", "123");
+        return createWebClient("http://localhost:8084/api/v1", "admin1", "123");
     }
 
     @Bean
